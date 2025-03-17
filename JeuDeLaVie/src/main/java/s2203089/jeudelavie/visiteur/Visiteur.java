@@ -1,36 +1,37 @@
-package s2203089.visiteur;
+package s2203089.jeudelavie.visiteur;
 
-import s2203089.JeuDeLaVie;
-import s2203089.cellule.Cellule;
+import s2203089.jeudelavie.JeuDeLaVie;
+import s2203089.jeudelavie.cellule.Cellule;
 
 /**
- * Classe abstraite pour le pattern Visiteur.
+ * Represente un visiteur pour le jeu de la vie. Le visiteur permet de définir
+ * les règles du jeu de la vie.
  */
 public abstract class Visiteur {
 
     /**
-     * Le jeu
+     * Le jeu de la vie.
      */
     protected JeuDeLaVie jeu;
 
     /**
      * Constructeur de la classe.
      *
-     * @param jeu le jeu
+     * @param jeu le jeu de la vie a visiter
      */
     public Visiteur(JeuDeLaVie jeu) {
         this.jeu = jeu;
     }
 
     /**
-     * Permet de visiter une cellule vivante.
+     * Méthode pour visiter une cellule vivante.
      *
      * @param cellule la cellule a visiter
      */
     public abstract void visiteCelluleVivante(Cellule cellule);
 
     /**
-     * Permet de visiter une cellule morte.
+     * Méthode pour visiter une cellule morte.
      *
      * @param cellule la cellule a visiter
      */

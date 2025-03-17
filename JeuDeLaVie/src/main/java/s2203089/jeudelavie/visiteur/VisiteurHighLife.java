@@ -1,36 +1,33 @@
-package s2203089.visiteur;
+package s2203089.jeudelavie.visiteur;
 
-import s2203089.JeuDeLaVie;
-import s2203089.cellule.Cellule;
-import s2203089.commande.CommandeMeurt;
-import s2203089.commande.CommandeVit;
+import s2203089.jeudelavie.JeuDeLaVie;
+import s2203089.jeudelavie.cellule.Cellule;
+import s2203089.jeudelavie.commande.CommandeMeurt;
+import s2203089.jeudelavie.commande.CommandeVit;
 
 /**
- * Classe représentant un visiteur pour le jeu de la vie HighLife. utilisée pour
- * appliquer le pattern Visiteur
- *
- * @see Visiteur
+ * Represente un visiteur pour le jeu de la vie. Applique les règles High Life.
  */
 public class VisiteurHighLife extends Visiteur {
 
     /**
      * Constructeur de la classe.
      *
-     * @param jeu le jeu
+     * @param jeu le jeu de la vie a visiter
      */
     public VisiteurHighLife(JeuDeLaVie jeu) {
         super(jeu);
     }
 
     /**
-     * Permet de visiter une cellule vivante.
+     * Méthode pour visiter une cellule vivante.
      *
      * @param cellule la cellule a visiter
      */
     @Override
     public void visiteCelluleVivante(Cellule cellule) {
 
-        int nbVoisines = cellule.nombreVoisinsVivants(jeu);
+        int nbVoisines = cellule.nombreVoisinesVivantes(jeu);
 
         if (nbVoisines < 2 || nbVoisines > 3) {
             jeu.ajouteCommande(new CommandeMeurt(cellule));
@@ -38,14 +35,14 @@ public class VisiteurHighLife extends Visiteur {
     }
 
     /**
-     * Permet de visiter une cellule morte.
+     * Méthode pour visiter une cellule morte.
      *
      * @param cellule la cellule a visiter
      */
     @Override
     public void visiteCelluleMorte(Cellule cellule) {
 
-        int nbVoisines = cellule.nombreVoisinsVivants(jeu);
+        int nbVoisines = cellule.nombreVoisinesVivantes(jeu);
 
         if (nbVoisines == 3 || nbVoisines == 6) {
             jeu.ajouteCommande(new CommandeVit(cellule));

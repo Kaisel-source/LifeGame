@@ -1,18 +1,18 @@
-package s2203089.commande;
+package s2203089.jeudelavie.commande;
 
-import s2203089.cellule.Cellule;
+import s2203089.jeudelavie.cellule.Cellule;
 
 /**
- * Classe représentant une commande. utilisée pour appliquer le pattern Command
+ * Classe représentant la commande pour tuer une cellule.
  */
-public class CommandeVit extends Commande {
+public class CommandeMeurt extends Commande {
 
     /**
      * Constructeur de la classe.
      *
      * @param cellule la cellule sur laquelle la commande va être appliquée
      */
-    public CommandeVit(Cellule cellule) {
+    public CommandeMeurt(Cellule cellule) {
         super(cellule);
     }
 
@@ -21,7 +21,7 @@ public class CommandeVit extends Commande {
      */
     @Override
     public void executer() {
-        this.cellule.vit();
+        this.cellule.meurt();
     }
 
 }

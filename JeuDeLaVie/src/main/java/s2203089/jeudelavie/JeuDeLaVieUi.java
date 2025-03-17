@@ -1,4 +1,4 @@
-package s2203089;
+package s2203089.jeudelavie;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -29,150 +29,102 @@ import javax.swing.SwingConstants;
 import javax.swing.Timer;
 import javax.swing.event.ChangeListener;
 
-import s2203089.commande.Commande;
-import s2203089.commande.CommandeMeurt;
-import s2203089.commande.CommandeVit;
-import s2203089.observateur.Observateur;
-import s2203089.visiteur.Visiteur;
-import s2203089.visiteur.VisiteurClassique;
-import s2203089.visiteur.VisiteurDayAndNight;
-import s2203089.visiteur.VisiteurHighLife;
+import s2203089.jeudelavie.commande.Commande;
+import s2203089.jeudelavie.commande.CommandeMeurt;
+import s2203089.jeudelavie.commande.CommandeVit;
+import s2203089.jeudelavie.observeur.Observateur;
+import s2203089.jeudelavie.visiteur.Visiteur;
+import s2203089.jeudelavie.visiteur.VisiteurClassique;
+import s2203089.jeudelavie.visiteur.VisiteurDayAndNight;
+import s2203089.jeudelavie.visiteur.VisiteurHighLife;
 
 /**
- * Interface graphique du jeu de la vie. utilisée pour appliquer le pattern
- * Observateur
+ * Classe représentant l'interface utilisateur du jeu de la vie.
  */
-public class JeuDeLaVieUi extends JFrame implements Observateur { // Extend the class with the appropriate superclass
+public class JeuDeLaVieUi extends JFrame implements Observateur {
 
     /**
-     * L'instance du jeu de la vie.
+     * Le jeu de la vie.
      */
-    private JeuDeLaVie jeu;
-    /**
-     * L'observateur terminal.
-     */
-    private JeuDeLaVieTerminal terminal = null;
+    private final JeuDeLaVie jeu;
+
     /**
      * Bouton pour passer à la génération suivante.
      */
     private final JButton nextGeneration;
 
     /**
-     * Taille de la largeur de la fenêtre par défaut.
+     * Largeur par défaut de la fenêtre.
      */
-    private final int defaultWidth = 1920;
+    private final int defaultWidth = 1366;
+
     /**
-     * Taille de la hauteur de la fenêtre par défaut.
+     * Hauteur par défaut de la fenêtre.
      */
-    private final int defaultHeight = 1080;
+    private final int defaultHeight = 768;
 
     /**
      * Label de la génération.
      */
     private final JLabel generationLabel;
+
     /**
-     * Label du nombre de cellules.
+     * Label de le nombre de cellules.
      */
     private final JLabel cellulesLabel;
+
     /**
      * Label de la densité.
      */
     private final JLabel densiteLabel;
+
     /**
      * Label des couleurs.
      */
     private final JLabel colorLabel;
+
     /**
-     * Bouton de démarrage.
+     * Bouton pour démarrer le jeu.
      */
     private final JButton startButton;
+
     /**
-     * Bouton pour le mode classique.
+     * Radio bouton pour le mode classique.
      */
-    private final JRadioButton classiqueMode;
+    private JRadioButton classiqueMode;
+
     /**
-     * Bouton pour le mode day and night.
+     * Radio bouton pour le mode day and night.
      */
-    private final JRadioButton dayAndNightMode;
+    private JRadioButton dayAndNightMode;
+
     /**
-     * Bouton pour le mode high life.
+     * Radio bouton pour le mode high life.
      */
-    private final JRadioButton highLifeMode;
+    private JRadioButton highLifeMode;
+
     /**
-     * Booléen pour les couleurs.
+     * Boolean pour activé les couleurs.
      */
     private boolean color = false;
 
     /**
      * Couleur des boutons.
      */
-    private Color buttonColor = new Color(230, 240, 255);
+    private final Color buttonColor = new Color(230, 240, 255);
 
-    /**
-     * Constructeur de la classe.
-     *
-     * @param jeu Le jeu
-     *
-     */
     public JeuDeLaVieUi(JeuDeLaVie jeu) {
         this.jeu = jeu;
         this.jeu.attacheObservateur(this);
-        for (Observateur o : this.jeu.getObservateurs()) {
-            if (o instanceof JeuDeLaVieTerminal) {
-                this.terminal = (JeuDeLaVieTerminal) o;
-                break;
-            }
-        }
-        if (this.terminal == null) {
-            this.terminal = new JeuDeLaVieTerminal(jeu);
-        }
-
-        /**
-         * Selecteur du mode de jeu
-         */
-        JPanel modSelector = new JPanel();
-        modSelector.setLayout(new BoxLayout(modSelector, BoxLayout.PAGE_AXIS));
-
-        /* classique */
-        classiqueMode = new JRadioButton("Classique");
-        classiqueMode.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                jeu.setVisiteur(new VisiteurClassique(jeu));
-            }
-        });
-
-        /* mode day and night */
-        this.dayAndNightMode = new JRadioButton("Day and Night");
-        dayAndNightMode.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                jeu.setVisiteur(new VisiteurDayAndNight(jeu));
-            }
-        });
-
-        /* mode high life */
-        this.highLifeMode = new JRadioButton("High Life");
-        highLifeMode.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                jeu.setVisiteur(new VisiteurHighLife(jeu));
-            }
-        });
-
-        /* Ajout des modes de jeu */
-        modSelector.add(classiqueMode);
-        modSelector.add(dayAndNightMode);
-        modSelector.add(highLifeMode);
 
         /*
-     * Bouton de démarrage
+         * Bouton de démarrage
          */
         this.startButton = new JButton();
         startButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) { // inverse l'état de jeu
-                jeu.setRun(!jeu.getRun());
+                jeu.setlancer(!jeu.getlancer());
             }
         });
         startButton.setFont(new Font("", Font.PLAIN, 40));
@@ -183,12 +135,11 @@ public class JeuDeLaVieUi extends JFrame implements Observateur { // Extend the 
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                if (jeu.getRun()) { // Si le jeu est en pause
-                    jeu.setRun(false); // On met le jeu en pause
+                if (jeu.getlancer()) { // Si le jeu est en pause
+                    jeu.setlancer(false); // On met le jeu en pause
                 }
                 jeu.calculerGenerationSuivante(); // On calcule la génération suivante
                 jeu.notifieObservateur(); // On notifie les observateurs
-
             }
         });
 
@@ -332,7 +283,7 @@ public class JeuDeLaVieUi extends JFrame implements Observateur { // Extend the 
         toolBar.add(colorModel);
 
         toolBar.add(slider);
-        toolBar.add(modSelector);
+        toolBar.add(creerSelecteurMode());
 
         toolBar.setFloatable(false);
 
@@ -353,7 +304,7 @@ public class JeuDeLaVieUi extends JFrame implements Observateur { // Extend the 
             @Override
             public void actionPerformed(ActionEvent e) {
                 jeu.reinitialiser();
-                jeu.setRun(false);
+                jeu.setlancer(false);
             }
         });
 
@@ -361,7 +312,7 @@ public class JeuDeLaVieUi extends JFrame implements Observateur { // Extend the 
         randomFill.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                jeu.init();
+                jeu.initialiseGrille();
             }
         });
 
@@ -407,7 +358,7 @@ public class JeuDeLaVieUi extends JFrame implements Observateur { // Extend the 
         densitySlider.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(javax.swing.event.ChangeEvent e) {
-                jeu.setDensity((Double) (densitySlider.getValue() / 200.0));
+                jeu.setdensite((Double) (densitySlider.getValue() / 200.0));
             }
         });
         stats.add(densitySlider);
@@ -423,16 +374,61 @@ public class JeuDeLaVieUi extends JFrame implements Observateur { // Extend the 
     }
 
     /**
-     * Méthode permettant de dessiner la grille.
+     * Méthode permettant de créer le selecteur de mode.
+     *
+     * @return le JPanel du selecteur de mode
+     */
+    private JPanel creerSelecteurMode() {
+        /*
+        * Selection du mode de jeu
+         */ JPanel modSelector = new JPanel();
+        modSelector.setLayout(new BoxLayout(modSelector, BoxLayout.PAGE_AXIS));
+
+        /* mode classique */
+        this.classiqueMode = new JRadioButton("Classique");
+        classiqueMode.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                jeu.setVisiteur(new VisiteurClassique(jeu));
+            }
+        });
+
+        /* mode day and night */
+        this.dayAndNightMode = new JRadioButton("Day and Night");
+        dayAndNightMode.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                jeu.setVisiteur(new VisiteurDayAndNight(jeu));
+            }
+        });
+
+        /* mode high life */
+        this.highLifeMode = new JRadioButton("High Life");
+        highLifeMode.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                jeu.setVisiteur(new VisiteurHighLife(jeu));
+            }
+        });
+
+        /* Ajout des modes de jeu */
+        modSelector.add(classiqueMode);
+        modSelector.add(dayAndNightMode);
+        modSelector.add(highLifeMode);
+        return modSelector;
+    }
+
+    /**
+     * Actualise l'interface utilisateur.
      */
     @Override
     public void actualise() {
-        this.generationLabel.setText("Generation : " + this.terminal.getGeneration());
-        this.cellulesLabel.setText("Cellules : " + this.terminal.getNbCellules());
-        this.densiteLabel.setText("Densité : " + jeu.getDensity());
+        this.generationLabel.setText("Generation : " + this.jeu.getGeneration());
+        this.cellulesLabel.setText("Cellules : " + this.jeu.compterCellules());
+        this.densiteLabel.setText("Densité : " + jeu.getdensite());
         this.colorLabel.setText("Couleurs : " + this.color);
 
-        if (jeu.getRun()) {
+        if (jeu.getlancer()) {
             this.startButton.setText("Pause");
         } else {
             this.startButton.setText("Start");
@@ -472,35 +468,41 @@ public class JeuDeLaVieUi extends JFrame implements Observateur { // Extend the 
          * Décalage en x.
          */
         private int offsetX;
+
         /**
          * Décalage en y.
          */
         private int offsetY;
+
         /**
-         * Dernier bouton pressé.
+         * Dernier bouton pressé (gauche ou droite).
          */
-        private int lastPressed;
+        private int dernierClic;
+
         /**
          * Échelle.
          */
         private double scale = 10;
+
         /**
          * Dernière commande.
          */
         private Commande lastCommande;
+
         /**
          * Rayon d'action des action.
          */
         private int rayon = 1;
 
         /**
-         * Coordonner x de la cellule pointer par la souris.
+         * la position x de la cellule pointer par la souris.
          */
-        private int celluleX;
+        private int posX;
+
         /**
-         * Coordonner y de la cellule pointer par la souris.
+         * position y de la cellule pointer par la souris.
          */
-        private int celluleY;
+        private int posY;
 
         /**
          * Constructeur de la classe.
@@ -510,9 +512,10 @@ public class JeuDeLaVieUi extends JFrame implements Observateur { // Extend the 
             this.addMouseListener(this);
             this.addMouseMotionListener(this);
             this.addMouseWheelListener(this);
+
             // commence au centre
-            offsetX = -(int) (jeu.getTailleX() * scale / 2);
-            offsetY = -(int) (jeu.getTailleY() * scale / 2);
+            offsetX = -(int) (jeu.getTailleMaxX() * scale / 2);
+            offsetY = -(int) (jeu.getTailleMaxY() * scale / 2);
         }
 
         /**
@@ -524,8 +527,8 @@ public class JeuDeLaVieUi extends JFrame implements Observateur { // Extend the 
         public void paint(Graphics g) {
             super.paint(g);
 
-            for (int x = 0; x < jeu.getTailleX(); x++) {
-                for (int y = 0; y < jeu.getTailleY(); y++) {
+            for (int x = 0; x < jeu.getTailleMaxX(); x++) {
+                for (int y = 0; y < jeu.getTailleMaxY(); y++) {
 
                     int tailleZone = (int) (scale);
 
@@ -537,9 +540,9 @@ public class JeuDeLaVieUi extends JFrame implements Observateur { // Extend the 
                     if (cy + tailleZone < 0 || cy > this.getWidth()) {
                         continue;
                     }
-                    if (jeu.getGrille(x, y).estVivante()) {
+                    if (jeu.getGrillexy(x, y).estVivante()) {
                         if (color) {
-                            switch (jeu.getGrille(x, y).nombreVoisinsVivants(jeu)) {
+                            switch (jeu.getGrillexy(x, y).nombreVoisinesVivantes(jeu)) {
                                 case 0:
                                     g.setColor(Color.BLACK);
                                     break;
@@ -579,12 +582,108 @@ public class JeuDeLaVieUi extends JFrame implements Observateur { // Extend the 
                     }
                 }
             }
-            g.setColor(Color.BLACK);
-            g.drawRect(offsetX, offsetY, (int) (jeu.getTailleX() * scale), (int) (jeu.getTailleY() * scale));
+            g.setColor(Color.RED);
+            g.drawRect(offsetX, offsetY, (int) (jeu.getTailleMaxX() * scale), (int) (jeu.getTailleMaxY() * scale));
         }
 
         /**
-         * Méthode permettant de gérer le zoom via la molette de la souris.
+         * Ajoute une commande manuelle et l'execute.
+         *
+         * @param e l'instance de MouseEvent
+         * @param c la commande a appliquer
+         */
+        public void commandeManuelle(MouseEvent e, Commande c) {
+            if (lastCommande == null || !lastCommande.equals(c)
+                    && posX >= 0 && posY >= 0
+                    && posX < jeu.getTailleMaxX() && posY < jeu.getTailleMaxY()) {
+                lastCommande = c;
+                c.executer();
+            }
+        }
+
+        /**
+         * Défini le rayon d'action des actions.
+         *
+         * @param rayon le rayon a set
+         */
+        public void setRayon(int rayon) {
+            if (rayon > 0) {
+                this.rayon = rayon;
+            }
+        }
+
+        /**
+         * Gère l'actualisation de la cellule en fonction de la position de la
+         * souris.
+         *
+         * @param e l'evenement de souris
+         */
+        public void actualiserCellule(MouseEvent e) {
+
+            posX = (int) ((e.getX() - offsetX) / scale);
+            posY = (int) ((e.getY() - offsetY) / scale);
+        }
+
+        /**
+         * Gère l'évènement lors du clic de souris (Clic gauche ou droit).
+         *
+         * @param dernierClic le dernier bouton pressé
+         * @param e l'evenement de souris
+         */
+        private void gestionClick(int dernierClic, MouseEvent e) {
+            if (dernierClic == MouseEvent.BUTTON1) { // Si on clique gauche on ajoute des cellules
+                for (int i = -rayon; i <= rayon; i++) {
+                    for (int j = -rayon; j <= rayon; j++) {
+                        if ((i * i + j * j) <= (rayon * rayon)) {
+                            commandeManuelle(e, new CommandeVit(jeu.getGrillexy(posX + i, posY + j)));
+                        }
+                    }
+                }
+            }
+
+            if (dernierClic == MouseEvent.BUTTON3) { // Si on clique droit on enlève des cellules
+                for (int i = -rayon; i <= rayon; i++) {
+                    for (int j = -rayon; j <= rayon; j++) {
+                        if ((i * i + j * j) <= (rayon * rayon)) {
+                            commandeManuelle(e, new CommandeMeurt(jeu.getGrillexy(posX + i, posY + j)));
+                        }
+                    }
+                }
+            }
+        }
+
+        /**
+         * Gère l'évènement lors du clic de souris.
+         *
+         * @param e l'evenement de souris
+         */
+        @Override
+        public void mousePressed(MouseEvent e) {
+            dernierClic = e.getButton();
+            actualiserCellule(e);
+
+            gestionClick(dernierClic, e);
+
+            repaint();
+        }
+
+        /**
+         * Gère l'évènement lors du déplacement de souris.
+         *
+         * @param e l'evenement de souris
+         */
+        @Override
+        public void mouseDragged(MouseEvent e) {
+
+            actualiserCellule(e);
+
+            gestionClick(dernierClic, e);
+
+            repaint();
+        }
+
+        /**
+         * Change l'échelle de la grille en fonction de la molette de la souris.
          */
         @Override
         public void mouseWheelMoved(MouseWheelEvent e) {
@@ -599,142 +698,37 @@ public class JeuDeLaVieUi extends JFrame implements Observateur { // Extend the 
             repaint();
         }
 
+        // ================================== Non utilisé ==================================
         /**
-         * Ajoute une commande manuelle et l'execute.
-         *
-         * @param e l'instance de MouseEvent
-         * @param c la commande a appliquer
-         */
-        public void commandeManuelle(MouseEvent e, Commande c) {
-            if (lastCommande == null || !lastCommande.equals(c)
-                    && celluleX >= 0 && celluleY >= 0
-                    && celluleX < jeu.getTailleX() && celluleY < jeu.getTailleY()) {
-                lastCommande = c;
-                c.executer();
-            }
-        }
-
-        /**
-         * Setter du rayon. si le rayon est entre 0 et 30 sinon on ne change pas
-         * le rayon
-         *
-         * @param rayon le rayon a set
-         */
-        public void setRayon(int rayon) {
-            if (rayon > 0 && rayon < 30) {
-                this.rayon = rayon;
-            }
-        }
-
-        /**
-         * Méthode permettant d'actualiser la cellule pointer par la souris.
-         *
-         * @param e l'instance de MouseEvent
-         */
-        public void actualiserCellule(MouseEvent e) {
-
-            celluleX = (int) ((e.getX() - offsetX) / scale);
-            celluleY = (int) ((e.getY() - offsetY) / scale);
-        }
-
-        /**
-         * Méthode permettant de gérer les événements de la souris en cliquant.
-         *
-         * @param lastPressed le dernier bouton pressé
-         * @param e l'instance de MouseEvent
-         */
-        private void gestionClick(int lastPressed, MouseEvent e) {
-            if (lastPressed == MouseEvent.BUTTON1) { // Si on clique gauche on ajoute des cellules
-                for (int i = -rayon; i <= rayon; i++) {
-                    for (int j = -rayon; j <= rayon; j++) {
-                        if ((i * i + j * j) <= (rayon * rayon)) {
-                            commandeManuelle(e, new CommandeVit(jeu.getGrille(celluleX + i, celluleY + j)));
-                        }
-                    }
-                }
-            }
-
-            if (lastPressed == MouseEvent.BUTTON3) { // Si on clique droit on enlève des cellules
-                for (int i = -rayon; i <= rayon; i++) {
-                    for (int j = -rayon; j <= rayon; j++) {
-                        if ((i * i + j * j) <= (rayon * rayon)) {
-                            commandeManuelle(e, new CommandeMeurt(jeu.getGrille(celluleX + i, celluleY + j)));
-                        }
-                    }
-                }
-            }
-        }
-
-        /**
-         * Méthode permettant de gérer les événements de la souris en cliquant.
-         *
-         * @param e l'instance de MouseEvent
-         */
-        @Override
-        public void mousePressed(MouseEvent e) {
-            lastPressed = e.getButton();
-            actualiserCellule(e);
-
-            gestionClick(lastPressed, e);
-
-            repaint();
-        }
-
-        /**
-         * Méthode permettant de gérer les événements de la souris en drag.
-         *
-         * @param e l'instance de MouseEvent
-         */
-        @Override
-        public void mouseDragged(MouseEvent e) {
-
-            actualiserCellule(e);
-
-            gestionClick(lastPressed, e);
-
-            repaint();
-        }
-
-        /**
-         * Méthode permettant de gérer les événements de la souris en relâchant.
-         *
-         * @param e l'instance de MouseEvent
+         * Non utilisé.
          */
         @Override
         public void mouseReleased(MouseEvent e) {
         }
 
         /**
-         * Méthode permettant de gérer les événements de la souris en entrant.
-         *
-         * @param e l'instance de MouseEvent
+         * Non utilisé.
          */
         @Override
         public void mouseEntered(MouseEvent e) {
         }
 
         /**
-         * Méthode permettant de gérer les événements de la souris en sortant.
-         *
-         * @param e l'instance de MouseEvent
+         * Non utilisé.
          */
         @Override
         public void mouseExited(MouseEvent e) {
         }
 
         /**
-         * Méthode permettant de gérer les événements de la souris en cliquant.
-         *
-         * @param e l'instance de MouseEvent
+         * Non utilisé.
          */
         @Override
         public void mouseClicked(MouseEvent e) {
         }
 
         /**
-         * Méthode permettant de gérer les événements de la souris en bougeant.
-         *
-         * @param e l'instance de MouseEvent
+         * Non utilisé.
          */
         @Override
         public void mouseMoved(MouseEvent e) {
