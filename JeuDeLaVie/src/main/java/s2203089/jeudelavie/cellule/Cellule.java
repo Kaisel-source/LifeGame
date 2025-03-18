@@ -1,5 +1,9 @@
 package s2203089.jeudelavie.cellule;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
 import s2203089.jeudelavie.JeuDeLaVie;
 import s2203089.jeudelavie.visiteur.Visiteur;
 
@@ -22,6 +26,13 @@ public class Cellule {
      * L'état de la cellule (Singletone).
      */
     private CelluleEtat etat;
+
+    private static final Random random = new Random();
+
+    private int gel = 0;
+
+    private int resistance = 0;
+    private int renaissances = 0;
 
     /**
      * Constructeur de la classe.
@@ -86,4 +97,50 @@ public class Cellule {
     public void accepte(Visiteur visiteur) {
         this.etat.accepte(visiteur, this);
     }
+
+    public Cellule voisineAleatoire(JeuDeLaVie jeu) {
+        List<Cellule> voisines = new ArrayList<>();
+
+        for (int i = this.posX - 1; i <= this.posX + 1; i++) {
+            for (int j = this.posY - 1; j <= this.posY + 1; j++) {
+                if (i >= 0 && i < jeu.getTailleMaxX() && j >= 0 && j < jeu.getTailleMaxY()
+                        && !(i == this.posX && j == this.posY)) {
+                    voisines.add(jeu.getGrillexy(i, j));
+                }
+            }
+        }
+
+        return voisines.isEmpty() ? null : voisines.get(random.nextInt(voisines.size()));
+    }
+
+    public void augmenterResistance() {
+        this.resistance++;
+    }
+
+    public boolean estImmortelle(int seuil) {
+        return this.resistance >= seuil;
+    }
+
+    public void enregistrerRenaissance() {
+        this.renaissances++;
+    }
+
+    public boolean peutEncoreRenaître(int maxRenaissances) {
+        return this.renaissances < maxRenaissances;
+    }
+
+    public void geler(int tours) {
+        this.gel = tours;
+    }
+
+    public boolean estGelee() {
+        return this.gel > 0;
+    }
+
+    public void decrementerGel() {
+        if (this.gel > 0) {
+            this.gel--;
+        }
+    }
+
 }
