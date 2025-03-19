@@ -1,4 +1,4 @@
-package s2203089.jeudelavie;
+package s2203089.jeudelavie.rendu;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -10,6 +10,7 @@ import java.awt.event.MouseWheelListener;
 
 import javax.swing.JPanel;
 
+import s2203089.jeudelavie.JeuDeLaVie;
 import s2203089.jeudelavie.cellule.Cellule;
 import s2203089.jeudelavie.commande.Commande;
 import s2203089.jeudelavie.commande.CommandeMeurt;
@@ -119,56 +120,84 @@ public class RenduJeuDeLaVie extends JPanel implements MouseWheelListener, Mouse
                         case 2 ->
                             colorPredicHL(x, y, g);
                         default -> {
+                            System.out.println("Mode de jeu non prédictif");
                         }
                     }
                 } else {
                     Cellule cellule = jeu.getGrillexy(x, y);
                     if (cellule.estVivante()) {
                         switch (modeJeu) {
-                            case 0 ->
+                            case 0 -> {
                                 g.setColor(Color.BLACK);
-                            case 1 ->
+                                MidiSoundManager.getInstance().playNote("BLACK");
+                            }
+                            case 1 -> {
                                 g.setColor(Color.ORANGE);
-                            case 2 ->
+                                MidiSoundManager.getInstance().playNote("ORANGE");
+                            }
+                            case 2 -> {
                                 g.setColor(Color.WHITE);
-                            case 3 ->
+                                MidiSoundManager.getInstance().playNote("WHITE");
+                            }
+                            case 3 -> {
                                 g.setColor(Color.GREEN);
+                                MidiSoundManager.getInstance().playNote("GREEN");
+                            }
                             case 4 -> { // Mode Mutation
                                 if (cellule.estImmortelle(3)) {
                                     g.setColor(Color.MAGENTA);
+                                    MidiSoundManager.getInstance().playNote("MAGENTA");
                                 } else {
                                     g.setColor(Color.BLUE);
+                                    MidiSoundManager.getInstance().playNote("BLUE");
                                 }
                             }
                             case 5 -> { // Mode Gel
                                 g.setColor(cellule.estGelee() ? Color.CYAN : Color.LIGHT_GRAY);
+                                MidiSoundManager.getInstance().playNote(cellule.estGelee() ? "CYAN" : "LIGHT_GRAY");
                             }
                             case 6 -> { // Mode Évolution
                                 g.setColor(cellule.estSuperCellule() ? Color.GREEN : Color.CYAN);
+                                MidiSoundManager.getInstance().playNote(cellule.estSuperCellule() ? "GREEN" : "CYAN");
                             }
                             case 7 -> { // Mode Civilisation
                                 switch (cellule.getNation()) {
-                                    case 0 ->
-                                        g.setColor(new Color(255, 0, 0));   // Rouge
-                                    case 1 ->
-                                        g.setColor(new Color(0, 255, 0));   // Vert
-                                    case 2 ->
-                                        g.setColor(new Color(0, 0, 255));   // Bleu
-                                    case 3 ->
-                                        g.setColor(new Color(255, 255, 0)); // Jaune
-                                    case 4 ->
-                                        g.setColor(new Color(255, 165, 0)); // Orange
-                                    default ->
+                                    case 0 -> {
+                                        g.setColor(Color.RED);
+                                        MidiSoundManager.getInstance().playNote("RED");
+                                    }
+                                    case 1 -> {
+                                        g.setColor(Color.GREEN);
+                                        MidiSoundManager.getInstance().playNote("GREEN");
+                                    }
+                                    case 2 -> {
+                                        g.setColor(Color.BLUE);
+                                        MidiSoundManager.getInstance().playNote("BLUE");
+                                    }
+                                    case 3 -> {
+                                        g.setColor(Color.YELLOW);
+                                        MidiSoundManager.getInstance().playNote("YELLOW");
+                                    }
+                                    case 4 -> {
+                                        g.setColor(Color.ORANGE);
+                                        MidiSoundManager.getInstance().playNote("ORANGE");
+                                    }
+                                    default -> {
                                         g.setColor(Color.WHITE);
+                                        MidiSoundManager.getInstance().playNote("WHITE");
+                                    }
                                 }
                             }
                             case 8 -> { // Mode Pandémie
                                 if (cellule.estInfectee()) {
-                                    g.setColor(cellule.estCritique() ? new Color(128, 0, 128) : Color.RED); // Critique en violet
+                                    g.setColor(cellule.estCritique() ? new Color(128, 0, 128) : Color.RED);
+                                    MidiSoundManager.getInstance().playNote(cellule.estCritique() ? "BLACK" : "RED");
                                 } else if (cellule.estImmune()) {
-                                    g.setColor(new Color(144, 238, 144)); // Vert clair pour immunisé
+                                    g.setColor(new Color(144, 238, 144));
+                                    MidiSoundManager.getInstance().playNote("GREEN");
                                 } else {
-                                    g.setColor(Color.BLUE); // Cellules saines
+                                    g.setColor(Color.BLUE);
+                                    MidiSoundManager.getInstance().playNote("BLUE");
                                 }
                             }
                             default -> {
@@ -191,11 +220,13 @@ public class RenduJeuDeLaVie extends JPanel implements MouseWheelListener, Mouse
                             default ->
                                 throw new AssertionError();
                         });
+                        MidiSoundManager.getInstance().playNote("DEAD");
                     }
+
                 }
                 g.fillRect(cx, cy, tailleZone, tailleZone);
+                g.drawRect(offsetX, offsetY, (int) (jeu.getTailleMaxX() * scale), (int) (jeu.getTailleMaxY() * scale));
             }
-            g.drawRect(offsetX, offsetY, (int) (jeu.getTailleMaxX() * scale), (int) (jeu.getTailleMaxY() * scale));
         }
     }
 
@@ -223,6 +254,7 @@ public class RenduJeuDeLaVie extends JPanel implements MouseWheelListener, Mouse
                 }
             }
         }
+        g.setColor(Color.BLACK);
     }
 
     private void colorPredicClassique(int x, int y, Graphics g) {
@@ -246,6 +278,7 @@ public class RenduJeuDeLaVie extends JPanel implements MouseWheelListener, Mouse
                     g.setColor(Color.RED); //meurt
                 } else {
                     g.setColor(Color.WHITE); //Vide
+
                 }
             }
         }

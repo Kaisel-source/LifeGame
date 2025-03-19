@@ -10,7 +10,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
 import s2203089.jeudelavie.JeuDeLaVie;
-import s2203089.jeudelavie.RenduJeuDeLaVie;
+import s2203089.jeudelavie.rendu.RenduJeuDeLaVie;
 import s2203089.jeudelavie.visiteur.Visiteur;
 import s2203089.jeudelavie.visiteur.VisiteurChaos;
 import s2203089.jeudelavie.visiteur.VisiteurCivilisation;

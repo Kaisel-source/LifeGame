@@ -246,6 +246,23 @@ public class JeuDeLaVie implements Observable {
         this.notifieObservateur();
     }
 
+    /**
+     * Compte le nombre de cellules par nation.
+     *
+     * @return le nombre de cellules par nation
+     */
+    public int[] compterCelluleNation() {
+        int[] nbCellulesNation = new int[5];
+        for (int y = 0; y < getTailleMaxY(); y++) {
+            for (int x = 0; x < getTailleMaxX(); x++) {
+                if (getGrillexy(x, y).estVivante()) {
+                    nbCellulesNation[getGrillexy(x, y).getNation()]++;
+                }
+            }
+        }
+        return nbCellulesNation;
+    }
+
     // ================================== Méthodes de les observables ==================================
     /**
      * Attache un observateur.

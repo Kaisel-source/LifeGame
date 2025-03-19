@@ -2,7 +2,6 @@ package s2203089.jeudelavie.panel;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -13,7 +12,7 @@ import javax.swing.JPanel;
 import javax.swing.JSlider;
 
 import s2203089.jeudelavie.JeuDeLaVie;
-import s2203089.jeudelavie.RenduJeuDeLaVie;
+import s2203089.jeudelavie.rendu.RenduJeuDeLaVie;
 
 public class ControlsPanel extends JPanel {
 
@@ -27,14 +26,14 @@ public class ControlsPanel extends JPanel {
         gbc.fill = GridBagConstraints.BOTH;
         gbc.insets = new Insets(10, 10, 10, 10); // Marges autour des composants
 
-        JButton startButton = new JButton("Start");
+        JButton startButton = new JButton("Lancer");
         startButton.setPreferredSize(new Dimension(150, 50));
         startButton.addActionListener(e -> {
             jeu.setlancer(!jeu.getlancer());
-            startButton.setText(jeu.getlancer() ? "Pause" : "Start");
+            startButton.setText(jeu.getlancer() ? "Stop" : "Lancer");
         });
 
-        JButton nextGenButton = new JButton("Next Generation");
+        JButton nextGenButton = new JButton("Gen suivante");
         nextGenButton.setPreferredSize(new Dimension(200, 50));
         nextGenButton.addActionListener(e -> {
             if (jeu.getlancer()) {
@@ -51,8 +50,7 @@ public class ControlsPanel extends JPanel {
         speedSlider.setPaintTicks(true);
         speedSlider.setPaintLabels(true);
 
-        JLabel speedLabel = new JLabel("Speed:");
-        speedLabel.setFont(new Font("Arial", Font.BOLD, 14));
+        JLabel speedLabel = new JLabel("Vitesse: ");
 
         // Placement des composants avec GridBagLayout
         gbc.gridx = 0;

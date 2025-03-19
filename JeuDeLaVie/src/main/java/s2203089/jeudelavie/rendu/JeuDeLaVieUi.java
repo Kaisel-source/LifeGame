@@ -1,4 +1,4 @@
-package s2203089.jeudelavie;
+package s2203089.jeudelavie.rendu;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -12,6 +12,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.JSlider;
@@ -22,8 +23,10 @@ import javax.swing.event.ChangeListener;
 
 import java.awt.FlowLayout;
 
+import s2203089.jeudelavie.JeuDeLaVie;
 import s2203089.jeudelavie.observeur.Observateur;
 import s2203089.jeudelavie.panel.*;
+import s2203089.jeudelavie.panel.GameStatsPanel;
 
 /**
  * Classe représentant l'interface utilisateur du jeu de la vie.
@@ -60,11 +63,12 @@ public class JeuDeLaVieUi extends JFrame implements Observateur {
      */
     private boolean color = false;
 
-    private final Label rayonLabel = new Label();
+    private final Label rayonLabel = new Label("Rayon : ");
 
-    private Label modeLabel = new Label();
-    private Label vitesseLabel = new Label();
-    private Label couleurLabel = new Label();
+    private Label modeLabel = new Label("Mode : ");
+    private Label vitesseLabel = new Label("Vitesse : ");
+    private Label couleurLabel = new Label("Couleurs : ");
+    private Label sonLabel = new Label("Son : 80");
 
     private final RenduJeuDeLaVie rendu;
     private final GameStatsPanel statsPanel;
@@ -241,6 +245,7 @@ public class JeuDeLaVieUi extends JFrame implements Observateur {
             public void actionPerformed(ActionEvent e) {
                 color = colorModel.isSelected();
                 rendu.setColor(color);
+                System.out.println("Color : " + color);
                 actualise();
             }
         });
@@ -259,7 +264,7 @@ public class JeuDeLaVieUi extends JFrame implements Observateur {
         stats.add(new JSeparator(SwingConstants.HORIZONTAL));
         JPanel colorPanel = new JPanel();
         colorPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-        colorPanel.add(creeLabel("Couleurs : "));
+        colorPanel.add(creeLabel("Prédic : "));
         colorPanel.add(colorModel);
         stats.add(colorPanel);
         stats.add(creeLabel("Bleu : Va naitre"));
@@ -275,12 +280,12 @@ public class JeuDeLaVieUi extends JFrame implements Observateur {
         stats.add(new JSeparator(SwingConstants.HORIZONTAL));
         stats.add(creeMenuDirection());
         stats.add(new JSeparator(SwingConstants.HORIZONTAL));
-        stats.add(resetButton);
+
         JTextArea density = new JTextArea("Densité : ", 1, 1);
         density.setEditable(false);
         density.setPreferredSize(new Dimension(100, 20));
         density.setMaximumSize(getPreferredSize());
-        stats.add(density);
+
         JSlider densitySlider = new JSlider(0, 200, 100);
         densitySlider.addChangeListener(new ChangeListener() {
             @Override
@@ -288,8 +293,20 @@ public class JeuDeLaVieUi extends JFrame implements Observateur {
                 jeu.setdensite((Double) (densitySlider.getValue() / 200.0));
             }
         });
+        JSlider volumeSlider = new JSlider(0, 100, MidiSoundManager.getInstance().getVolume());
+        volumeSlider.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(javax.swing.event.ChangeEvent e) {
+                MidiSoundManager.getInstance().setVolume((int) volumeSlider.getValue());
+            }
+        });
+        stats.add(sonLabel);
+        stats.add(volumeSlider);
+        stats.add(new JSeparator(SwingConstants.HORIZONTAL));
+        stats.add(density);
         stats.add(densitySlider);
         stats.add(randomFill);
+        stats.add(resetButton);
         stats.setLayout(new BoxLayout(stats, BoxLayout.PAGE_AXIS));
         return stats;
     }
@@ -299,13 +316,44 @@ public class JeuDeLaVieUi extends JFrame implements Observateur {
      */
     @Override
     public void actualise() {
-        this.colorLabel.setText("Couleurs : " + this.color);
+        statsPanel.actualiser(jeu);
+        rendu.repaint();
+        this.colorLabel.setText("Couleurs : " + getDescMode());
         this.modeLabel.setText("Mode : " + jeu.getVisiteur().getClass().getSimpleName());
         this.vitesseLabel.setText("Vitesse : " + jeu.getDelai());
         this.rayonLabel.setText("Rayon : " + rendu.getRayon());
         this.modeLabel.setText("Mode : " + jeu.getVisiteur().getClass().getSimpleName());
-        statsPanel.actualiser(jeu);
-        rendu.repaint();
+        this.sonLabel.setText("Son : " + MidiSoundManager.getInstance().getVolume());
+    }
+
+    private String getDescMode() {
+        switch (jeu.getVisiteur().getClass().getSimpleName()) {
+            case "VisiteurClassique":
+                return "Vivant: Noir, Mort: Blanc";
+            case "VisiteurDayAndNight":
+                return "Vivant: Orange, Mort: Noir";
+            case "VisiteurHighLife":
+                return "Vivant: Blanc, Mort: Noir";
+            case "VisiteurChaos":
+                return "Vivant: Vert, Mort: Rouge";
+            case "VisiteurMutation":
+                return "Vivant: Bleu, Mort: Blanc";
+            case "VisiteurPandemie":
+                return "Sain:Bleu,Infecté: Rouge, Mort: Gris";
+            case "VisiteurGel":
+                return "Vivant: Gris,Gelé:Bleu, Mort: Noir";
+            case "VisiteurCivilisation":
+                int[] nation = jeu.compterCelluleNation();
+                return "Vert: " + nation[0] + ", Rouge: " + nation[1] + ", Bleu: " + nation[2] + ", Jaune: "
+                        + nation[3];
+            default:
+                return "No data";
+        }
+
+    }
+
+    public RenduJeuDeLaVie getRendu() {
+        return rendu;
     }
 
 }
