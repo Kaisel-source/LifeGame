@@ -77,9 +77,9 @@ public class JeuDeLaVie implements Observable {
     /**
      * Constructeur de la classe.
      */
-    public JeuDeLaVie() {
-        this.tailleMaxX = 500;
-        this.tailleMaxY = 500;
+    public JeuDeLaVie(int tailleX, int tailleY) {
+        this.tailleMaxX = tailleX;
+        this.tailleMaxY = tailleY;
         this.grille = new Cellule[this.tailleMaxX][this.tailleMaxY];
         this.initialiseGrille();
         //dort pendant 200 ms

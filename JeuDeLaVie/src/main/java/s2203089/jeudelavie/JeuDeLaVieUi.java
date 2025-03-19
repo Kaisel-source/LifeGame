@@ -1,49 +1,28 @@
 package s2203089.jeudelavie;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Graphics;
 import java.awt.Label;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
-import java.awt.event.MouseWheelEvent;
-import java.awt.event.MouseWheelListener;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
 import javax.swing.JSeparator;
 import javax.swing.JSlider;
 import javax.swing.JTextArea;
-import javax.swing.JToolBar;
 import javax.swing.SwingConstants;
 import javax.swing.Timer;
 import javax.swing.event.ChangeListener;
-import javax.swing.event.ChangeEvent;
-import javax.swing.JLabel;
 
 import java.awt.FlowLayout;
 
-import s2203089.jeudelavie.commande.Commande;
-import s2203089.jeudelavie.commande.CommandeMeurt;
-import s2203089.jeudelavie.commande.CommandeVit;
 import s2203089.jeudelavie.observeur.Observateur;
-import s2203089.jeudelavie.visiteur.Visiteur;
-import s2203089.jeudelavie.visiteur.VisiteurChaos;
-import s2203089.jeudelavie.visiteur.VisiteurClassique;
-import s2203089.jeudelavie.visiteur.VisiteurDayAndNight;
-import s2203089.jeudelavie.visiteur.VisiteurGel;
-import s2203089.jeudelavie.visiteur.VisiteurMutation;
-import s2203089.jeudelavie.visiteur.VisiteurHighLife;
 import s2203089.jeudelavie.panel.*;
 
 /**
@@ -81,7 +60,7 @@ public class JeuDeLaVieUi extends JFrame implements Observateur {
      */
     private boolean color = false;
 
-    private Label rayonLabel = new Label();
+    private final Label rayonLabel = new Label();
 
     private Label modeLabel = new Label();
     private Label vitesseLabel = new Label();

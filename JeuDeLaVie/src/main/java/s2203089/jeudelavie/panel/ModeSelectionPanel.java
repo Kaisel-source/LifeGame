@@ -13,11 +13,14 @@ import s2203089.jeudelavie.JeuDeLaVie;
 import s2203089.jeudelavie.RenduJeuDeLaVie;
 import s2203089.jeudelavie.visiteur.Visiteur;
 import s2203089.jeudelavie.visiteur.VisiteurChaos;
+import s2203089.jeudelavie.visiteur.VisiteurCivilisation;
 import s2203089.jeudelavie.visiteur.VisiteurClassique;
 import s2203089.jeudelavie.visiteur.VisiteurDayAndNight;
+import s2203089.jeudelavie.visiteur.VisiteurEvolution;
 import s2203089.jeudelavie.visiteur.VisiteurGel;
 import s2203089.jeudelavie.visiteur.VisiteurHighLife;
 import s2203089.jeudelavie.visiteur.VisiteurMutation;
+import s2203089.jeudelavie.visiteur.VisiteurPandemie;
 
 public class ModeSelectionPanel extends JPanel {
 
@@ -41,9 +44,12 @@ public class ModeSelectionPanel extends JPanel {
         JRadioButton chaosMode = createModeButton("Chaos", jeu, rendu, new VisiteurChaos(jeu), 3, group);
         JRadioButton mutationMode = createModeButton("Mutation", jeu, rendu, new VisiteurMutation(jeu), 4, group);
         JRadioButton gelMode = createModeButton("Gel", jeu, rendu, new VisiteurGel(jeu), 5, group);
+        JRadioButton evolutionMode = createModeButton("Evolution", jeu, rendu, new VisiteurEvolution(jeu), 6, group);
+        JRadioButton civilisationMode = createModeButton("Civilisation", jeu, rendu, new VisiteurCivilisation(jeu), 7, group);
+        JRadioButton pandemicMode = createModeButton("Pandemie", jeu, rendu, new VisiteurPandemie(jeu), 8, group);
 
         // Ajout des boutons dans un agencement 2 colonnes × 3 lignes
-        JRadioButton[] buttons = {classiqueMode, dayAndNightMode, highLifeMode, chaosMode, mutationMode, gelMode};
+        JRadioButton[] buttons = {classiqueMode, dayAndNightMode, highLifeMode, chaosMode, mutationMode, gelMode, evolutionMode, civilisationMode, pandemicMode};
         for (int i = 0; i < buttons.length; i++) {
             gbc.gridx = i % 2; // Deux colonnes
             gbc.gridy = i / 2; // Change de ligne après deux boutons

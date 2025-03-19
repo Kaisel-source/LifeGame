@@ -6,7 +6,7 @@ package s2203089.jeudelavie;
 public class Main {
 
     public static void main(String[] args) {
-        JeuDeLaVie jeu = new JeuDeLaVie();
+        JeuDeLaVie jeu = new JeuDeLaVie(500, 500);
         new JeuDeLaVieUi(jeu);
 
         while (true) {

@@ -10,6 +10,7 @@ import java.awt.event.MouseWheelListener;
 
 import javax.swing.JPanel;
 
+import s2203089.jeudelavie.cellule.Cellule;
 import s2203089.jeudelavie.commande.Commande;
 import s2203089.jeudelavie.commande.CommandeMeurt;
 import s2203089.jeudelavie.commande.CommandeVit;
@@ -100,187 +101,187 @@ public class RenduJeuDeLaVie extends JPanel implements MouseWheelListener, Mouse
             for (int y = 0; y < jeu.getTailleMaxY(); y++) {
 
                 int tailleZone = (int) (scale);
-
                 int cx = (int) (x * scale + offsetX);
                 if (cx + tailleZone < 0 || cx > this.getWidth()) {
                     continue;
                 }
                 int cy = (int) (y * scale + offsetY);
-                if (cy + tailleZone < 0 || cy > this.getWidth()) {
+                if (cy + tailleZone < 0 || cy > this.getHeight()) {
                     continue;
                 }
+
                 if (color) {
                     switch (modeJeu) {
-                        case 0:
+                        case 0 ->
                             colorPredicClassique(x, y, g);
-                            break;
-                        case 1:
+                        case 1 ->
                             colorPredicDN(x, y, g);
-                            break;
-                        case 2:
+                        case 2 ->
                             colorPredicHL(x, y, g);
-                            break;
-                        default:
-                            break;
+                        default -> {
+                        }
                     }
                 } else {
-                    if (jeu.getGrillexy(x, y).estVivante()) {
+                    Cellule cellule = jeu.getGrillexy(x, y);
+                    if (cellule.estVivante()) {
                         switch (modeJeu) {
-                            case 0:
+                            case 0 ->
                                 g.setColor(Color.BLACK);
-                                break;
-                            case 1:
+                            case 1 ->
                                 g.setColor(Color.ORANGE);
-                                break;
-                            case 2:
+                            case 2 ->
                                 g.setColor(Color.WHITE);
-                                break;
-                            case 3:
+                            case 3 ->
                                 g.setColor(Color.GREEN);
-                                break;
-                            case 4: // Mode Mutation
-                                if (jeu.getGrillexy(x, y).estImmortelle(3)) { // Seuil d'immortalité défini à 3
-                                    g.setColor(Color.MAGENTA); // Cellule immortelle en magenta
+                            case 4 -> { // Mode Mutation
+                                if (cellule.estImmortelle(3)) {
+                                    g.setColor(Color.MAGENTA);
                                 } else {
-                                    g.setColor(Color.BLUE); // Autres cellules vivantes en bleu
+                                    g.setColor(Color.BLUE);
                                 }
-                                break;
-                            case 5: // Mode Gel
-                                if (jeu.getGrillexy(x, y).estGelee()) {
-                                    g.setColor(Color.CYAN); // Cellule gelée en cyan
+                            }
+                            case 5 -> { // Mode Gel
+                                g.setColor(cellule.estGelee() ? Color.CYAN : Color.LIGHT_GRAY);
+                            }
+                            case 6 -> { // Mode Évolution
+                                g.setColor(cellule.estSuperCellule() ? Color.GREEN : Color.CYAN);
+                            }
+                            case 7 -> { // Mode Civilisation
+                                switch (cellule.getNation()) {
+                                    case 0 ->
+                                        g.setColor(new Color(255, 0, 0));   // Rouge
+                                    case 1 ->
+                                        g.setColor(new Color(0, 255, 0));   // Vert
+                                    case 2 ->
+                                        g.setColor(new Color(0, 0, 255));   // Bleu
+                                    case 3 ->
+                                        g.setColor(new Color(255, 255, 0)); // Jaune
+                                    case 4 ->
+                                        g.setColor(new Color(255, 165, 0)); // Orange
+                                    default ->
+                                        g.setColor(Color.WHITE);
+                                }
+                            }
+                            case 8 -> { // Mode Pandémie
+                                if (cellule.estInfectee()) {
+                                    g.setColor(cellule.estCritique() ? new Color(128, 0, 128) : Color.RED); // Critique en violet
+                                } else if (cellule.estImmune()) {
+                                    g.setColor(new Color(144, 238, 144)); // Vert clair pour immunisé
                                 } else {
-                                    g.setColor(Color.LIGHT_GRAY); // Cellule vivante normale en gris clair
+                                    g.setColor(Color.BLUE); // Cellules saines
                                 }
-                                break;
-                            default:
-                                break;
+                            }
+                            default -> {
+                            }
                         }
-                    } else {
-                        switch (modeJeu) {
-                            case 0:
-                                g.setColor(Color.WHITE);
-                                break;
-                            case 1:
-                                g.setColor(Color.BLACK);
-                                break;
-                            case 2:
-                                g.setColor(Color.BLACK);
-                                break;
-                            case 3:
-                                g.setColor(Color.RED);
-                                break;
-                            case 4: // Mode Mutation
-                                if (jeu.getGrillexy(x, y).peutEncoreRenaître(2)) { // Seuil de renaissances défini à 2
-                                    g.setColor(Color.YELLOW); // Cellule morte mais pouvant renaître en jaune
-                                } else {
-                                    g.setColor(Color.DARK_GRAY); // Cellule définitivement morte en gris foncé
-                                }
-                                break;
-                            case 5: // Mode Gel
-                                g.setColor(Color.DARK_GRAY); // Cellule morte en gris foncé pour indiquer qu’elle est hors jeu
-                                break;
-                            default:
+                    } else { // Cellules mortes
+                        g.setColor(modeJeu == 7 || modeJeu == 8 ? Color.GRAY : switch (modeJeu) {
+                            case 0 ->
+                                Color.WHITE;
+                            case 1, 2 ->
+                                Color.BLACK;
+                            case 3 ->
+                                Color.RED;
+                            case 4 ->
+                                cellule.peutEncoreRenaître(2) ? Color.YELLOW : Color.DARK_GRAY;
+                            case 5 ->
+                                Color.DARK_GRAY;
+                            case 6 ->
+                                Color.BLACK;
+                            default ->
                                 throw new AssertionError();
-                        }
+                        });
                     }
-
                 }
                 g.fillRect(cx, cy, tailleZone, tailleZone);
             }
             g.drawRect(offsetX, offsetY, (int) (jeu.getTailleMaxX() * scale), (int) (jeu.getTailleMaxY() * scale));
         }
-
     }
 
     private void colorPredicDN(int x, int y, Graphics g) {
         switch (jeu.getGrillexy(x, y).nombreVoisinesVivantes(jeu)) {
-            case 3:
-            case 6:
-            case 7:
-            case 8:
+            case 3, 6, 7, 8 -> {
                 if (jeu.getGrillexy(x, y).estVivante()) {
                     g.setColor(Color.GREEN); //vie
                 } else {
                     g.setColor(Color.BLUE); //naissance
                 }
-                break;
-            case 4:
+            }
+            case 4 -> {
                 if (jeu.getGrillexy(x, y).estVivante()) {
                     g.setColor(Color.GREEN); //vie
                 } else {
                     g.setColor(Color.WHITE); //meurt
                 }
-                break;
-
-            default:
+            }
+            default -> {
                 if (jeu.getGrillexy(x, y).estVivante()) {
                     g.setColor(Color.RED); //meurt
                 } else {
                     g.setColor(Color.WHITE); //Vide
                 }
-                break;
+            }
         }
     }
 
     private void colorPredicClassique(int x, int y, Graphics g) {
         switch (jeu.getGrillexy(x, y).nombreVoisinesVivantes(jeu)) {
-            case 2:
+            case 2 -> {
                 if (jeu.getGrillexy(x, y).estVivante()) {
                     g.setColor(Color.GREEN); //vie
                 } else {
                     g.setColor(Color.WHITE);
                 }
-                break;
-            case 3:
+            }
+            case 3 -> {
                 if (jeu.getGrillexy(x, y).estVivante()) {
                     g.setColor(Color.GREEN); //vie
                 } else {
                     g.setColor(Color.BLUE); //naissance
                 }
-                break;
-
-            default:
+            }
+            default -> {
                 if (jeu.getGrillexy(x, y).estVivante()) {
                     g.setColor(Color.RED); //meurt
                 } else {
                     g.setColor(Color.WHITE); //Vide
                 }
-                break;
+            }
         }
 
     }
 
     private void colorPredicHL(int x, int y, Graphics g) {
         switch (jeu.getGrillexy(x, y).nombreVoisinesVivantes(jeu)) {
-            case 2:
+            case 2 -> {
                 if (jeu.getGrillexy(x, y).estVivante()) {
                     g.setColor(Color.GREEN);
                 } else {
                     g.setColor(Color.WHITE);
                 }
-                break;
-            case 3:
+            }
+            case 3 -> {
                 if (jeu.getGrillexy(x, y).estVivante()) {
                     g.setColor(Color.GREEN); //vie
                 } else {
                     g.setColor(Color.BLUE); //naissance
                 }
-                break;
-            case 6:
+            }
+            case 6 -> {
                 if (jeu.getGrillexy(x, y).estVivante()) {
                     g.setColor(Color.RED); //vie
                 } else {
                     g.setColor(Color.BLUE); //naissance
                 }
-                break;
-
-            default:
+            }
+            default -> {
                 if (jeu.getGrillexy(x, y).estVivante()) {
                     g.setColor(Color.RED); //meurt
                 } else {
                     g.setColor(Color.WHITE); //vide
                 }
-                break;
+            }
         }
     }
 

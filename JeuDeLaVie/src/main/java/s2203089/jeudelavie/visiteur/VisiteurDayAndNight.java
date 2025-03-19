@@ -8,6 +8,11 @@ import s2203089.jeudelavie.commande.CommandeVit;
 /**
  * Represente un visiteur pour le jeu de la vie. Applique les règles Day &
  * Night.
+ *
+ * Les règles sont les suivantes : - Une cellule vivante meurt si elle a moins
+ * de 3 ou si elle a 5 voisins - Une cellule morte renaît si elle a 3 ou plus de
+ * 5 voisins
+ *
  */
 public class VisiteurDayAndNight extends Visiteur {
 

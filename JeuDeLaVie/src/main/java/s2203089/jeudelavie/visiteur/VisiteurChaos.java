@@ -10,6 +10,14 @@ import s2203089.jeudelavie.commande.CommandeVit;
 /**
  * Represente un visiteur appliquant les règles chaotiques du jeu de la vie.
  * (Règles custom)
+ *
+ * Les règles sont les suivantes : - 5% de chance qu'une cellule vivante meure
+ * spontanément - Une cellule vivante meurt si elle a moins de 2 ou plus de 4
+ * voisins - 10% de chance qu'une cellule vivante échange de place avec une
+ * voisine morte - 5% de chance qu'une cellule morte revienne à la vie
+ * spontanément - Une cellule morte renaît si elle a exactement 3 voisins ou si
+ * l'état précédent formait un motif oscillant
+ *
  */
 public class VisiteurChaos extends Visiteur {
 

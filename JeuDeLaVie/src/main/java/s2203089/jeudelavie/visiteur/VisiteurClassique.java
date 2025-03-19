@@ -7,6 +7,11 @@ import s2203089.jeudelavie.commande.CommandeVit;
 
 /**
  * Represente un visiteur pour le jeu de la vie. Applique les règles classiques.
+ *
+ * Les règles sont les suivantes : - Une cellule vivante meurt si elle a moins
+ * de 2 ou plus de 3 voisins - Une cellule morte renaît si elle a exactement 3
+ * voisins
+ *
  */
 public class VisiteurClassique extends Visiteur {
 
